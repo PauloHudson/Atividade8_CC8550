@@ -5,24 +5,27 @@
 
 ### a) GFC e complexidade
 
-O GFC pode ser descrito pelos nos abaixo:
+O GFC pode ser representado pelo diagrama abaixo:
 
-```text
-Entrada -> len(senha) < 8
-             | sim -> fraca -> saida
-             | nao -> pontos = 0 -> teste do for
-
-for: ainda ha caractere?
-       | nao -> pontos >= 4?
-       | sim -> c.isdigit()?
-                  | sim -> pontos += 1 -> for
-                  | nao -> not c.isalnum()?
-                             | sim -> pontos += 2 -> for
-                             | nao -> for
-
-pontos >= 4?
-   | sim -> forte -> saida
-   | nao -> media -> saida
+```mermaid
+flowchart TD
+   A([Entrada]) --> B{"len(senha) < 8?"}
+   B -- sim --> C[retorna fraca]
+   C --> Z([Saida])
+   B -- nao --> D[pontos = 0]
+   D --> E{"Ainda ha caractere?"}
+   E -- sim --> F{"c.isdigit()?"}
+   F -- sim --> G[pontos += 1]
+   G --> E
+   F -- nao --> H{"not c.isalnum()?"}
+   H -- sim --> I[pontos += 2]
+   I --> E
+   H -- nao --> E
+   E -- nao --> J{"pontos >= 4?"}
+   J -- sim --> K[retorna forte]
+   J -- nao --> L[retorna media]
+   K --> Z
+   L --> Z
 ```
 
 Ha cinco nos de decisao: o `if` do tamanho, o teste do `for`, o `if` de digito, o `elif` de simbolo e o `if` final. Portanto:
@@ -56,7 +59,7 @@ coverage report -m
 
 ### d) Teste de lacos
 
-As categorias teoricas sao 0, 1, 2 e muitas voltas. Para esta funcao, 0 e 1 volta sao inviaveis quando o laco e alcancado: chegar ao `for` exige uma senha com pelo menos 8 caracteres. O caso minimo executavel tem 8 voltas; `12345678` e `abcdefgh` cobrem esse caso, e `!!!!aaaa`/`a1b2c3d4` cobrem varias voltas com diferentes ramos do corpo.
+As categorias teoricas sao 0, 1, 2 e muitas voltas. Para esta funcao, 0 e 1 volta sao inviaveis quando o laco e alcancado: chegar ao `for` exige uma senha com pelo menos 8 caracteres. O caso minimo executavel tem 8 voltas; `12345678` e `abcdefgh` cobrem esse caso, e `!!!!aaaa`/`a1b2c3d4!` cobrem varias voltas com diferentes ramos do corpo.
 
 ## Exercicio 2 - Controle de embarque
 
@@ -69,6 +72,19 @@ cartao and documento and (grupo_chamado or prioridade)
 ```
 
 `pares_independentes(decisao, n)` gera pares de linhas que diferem em exatamente uma condicao e mudam a decisao.
+
+O fluxo da regra corrigida e:
+
+```mermaid
+flowchart TD
+   A([Entrada]) --> B{"cartao?"}
+   B -- nao --> F[recusa]
+   B -- sim --> C{"documento?"}
+   C -- nao --> F
+   C -- sim --> D{"grupo chamado ou prioridade?"}
+   D -- nao --> F
+   D -- sim --> E[embarque]
+```
 
 ### b) Pares e conjuntos MC/DC
 
@@ -106,6 +122,22 @@ cartao and documento and (grupo_chamado or prioridade)
 ## Exercicio 3 - Preco com desconto VIP
 
 ### a) Definicoes, usos e pares DU
+
+O fluxo de dados principal pode ser visualizado assim:
+
+```mermaid
+flowchart TD
+   A[total = preco<br/>def total(3)] --> B{"vip?"}
+   B -- sim --> C[desconto = preco * 0.2<br/>def desconto(5)]
+   C --> D[total = total - desconto<br/>def total(6)]
+   B -- nao --> E{"total < 50?"}
+   D --> E
+   E -- sim --> F[total = 50<br/>def total(8)]
+   E -- nao --> G[return total<br/>uso total(9)]
+   F --> G
+   C -. uso desconto(6) .-> D
+   A -. uso total(6) .-> D
+```
 
 Numeracao conforme o codigo do enunciado:
 
