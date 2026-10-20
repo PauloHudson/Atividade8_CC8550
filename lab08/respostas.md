@@ -127,13 +127,13 @@ O fluxo de dados principal pode ser visualizado assim:
 
 ```mermaid
 flowchart TD
-   A[total = preco<br/>def total(3)] --> B{"vip?"}
-   B -- sim --> C[desconto = preco * 0.2<br/>def desconto(5)]
-   C --> D[total = total - desconto<br/>def total(6)]
-   B -- nao --> E{"total < 50?"}
+   A["total = preco<br/>def total(3)"] --> B{"vip?"}
+   B -- sim --> C["desconto = preco * 0.2<br/>def desconto(5)"]
+   C --> D["total = total - desconto<br/>def total(6)"]
+   B -- nao --> E{"total &lt; 50?"}
    D --> E
-   E -- sim --> F[total = 50<br/>def total(8)]
-   E -- nao --> G[return total<br/>uso total(9)]
+   E -- sim --> F["total = 50<br/>def total(8)"]
+   E -- nao --> G["return total<br/>uso total(9)"]
    F --> G
    C -. uso desconto(6) .-> D
    A -. uso total(6) .-> D
